@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ms-clientes-solicitudes
+
+  # Esto evita que Spring intente conectarse a una base de datos todavía
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
