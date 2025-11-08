@@ -5,11 +5,15 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/ms_depositos
     username: postgres
-    password: cami_2025
+    password: 641723
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
   application:
     name: ms-depositos
 
@@ -17,3 +21,8 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

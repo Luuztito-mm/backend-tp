@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/ms_tarifas_costos
     username: postgres
-    password: cami_2025
+    password: 641723
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -16,3 +16,9 @@ spring:
         format_sql: true
   application:
     name: ms-tarifas-costos
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
