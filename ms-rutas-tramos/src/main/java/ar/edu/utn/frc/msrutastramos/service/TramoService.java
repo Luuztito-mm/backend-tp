@@ -5,8 +5,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import ar.edu.utn.frc.msrutastramos.model.dto.RutaCalculadaDTO;
 import ar.edu.utn.frc.msrutastramos.model.Tramo;
+import ar.edu.utn.frc.msrutastramos.model.dto.RutaCalculadaDTO;
+import ar.edu.utn.frc.msrutastramos.model.RutaResult;
 import ar.edu.utn.frc.msrutastramos.repository.TramoRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -16,83 +17,102 @@ public class TramoService {
 
     private final TramoRepository tramoRepository;
 
-    // ---------- CRUD que ya tenías ----------
-    public List<Tramo> listar() { return tramoRepository.findAll(); }
-
-    public Optional<Tramo> buscarPorId(Long id) { return tramoRepository.findById(id); }
-
-    public Tramo guardar(Tramo tramo) { return tramoRepository.save(tramo); }
-
-    public void eliminar(Long id) { tramoRepository.deleteById(id); }
-
-    public double calcularDistancia(String origen, String destino) {
-        return tramoRepository.findByOrigenAndDestino(origen, destino)
-                .stream().mapToDouble(Tramo::getDistanciaKm).sum();
+    // ---------- CRUD ----------
+    public List<Tramo> listar() {
+        return tramoRepository.findAll();
     }
 
-    // ---------- NUEVO: calcular mejor ruta ----------
-    public RutaCalculadaDTO calcularMejorRuta(String origen, String destino) {
-        // 1) Si hay tramo directo, lo usamos
-        List<Tramo> directos = tramoRepository.findByOrigenAndDestino(origen, destino);
-        if (!directos.isEmpty()) {
-            double dist = directos.stream().mapToDouble(Tramo::getDistanciaKm).sum();
-            double dur  = directos.stream().mapToDouble(Tramo::getDuracionHs).sum();
-            return new RutaCalculadaDTO(directos, dist, dur);
+    public Optional<Tramo> buscarPorId(Long id) {
+        return tramoRepository.findById(id);
+    }
+
+    public Tramo guardar(Tramo tramo) {
+        return tramoRepository.save(tramo);
+    }
+
+    public void eliminar(Long id) {
+        tramoRepository.deleteById(id);
+    }
+
+    // ---------- Cálculo de tramo directo ----------
+    public double calcularDistancia(String origen, String destino) {
+        List<Tramo> tramos = tramoRepository.findByOrigenAndDestino(origen, destino);
+
+        if (tramos.isEmpty()) {
+            throw new RuntimeException("No se encontró un tramo directo entre " + origen + " y " + destino);
         }
 
-        // 2) Construir un grafo en memoria a partir de todos los tramos
+        return tramos.stream()
+                .mapToDouble(Tramo::getDistanciaKm)
+                .sum();
+    }
+
+    // ---------- Calcular mejor ruta (algoritmo de Dijkstra) ----------
+    public RutaResult calcularMejorRuta(String origen, String destino) {
+        // 1️⃣ Obtener todos los tramos
         List<Tramo> todos = tramoRepository.findAll();
-        Map<String, List<Tramo>> adj = todos.stream()
+
+        // 2️⃣ Construir grafo en memoria
+        Map<String, List<Tramo>> adyacencia = todos.stream()
                 .collect(Collectors.groupingBy(Tramo::getOrigen));
 
-        // 3) Dijkstra por distancia
-        Map<String, Double> dist = new HashMap<>();
-        Map<String, Tramo> prevEdge = new HashMap<>();
-        PriorityQueue<String> pq = new PriorityQueue<>(Comparator.comparingDouble(dist::get));
+        // 3️⃣ Estructuras de soporte
+        Map<String, Double> distancia = new HashMap<>();
+        Map<String, Tramo> previo = new HashMap<>();
+        PriorityQueue<String> cola = new PriorityQueue<>(Comparator.comparingDouble(distancia::get));
 
-        // inicialización
-        Set<String> nodos = new HashSet<>();
-        todos.forEach(t -> { nodos.add(t.getOrigen()); nodos.add(t.getDestino()); });
+        // Inicialización
+        Set<String> ciudades = new HashSet<>();
+        todos.forEach(t -> {
+            ciudades.add(t.getOrigen());
+            ciudades.add(t.getDestino());
+        });
 
-        for (String n : nodos) dist.put(n, Double.POSITIVE_INFINITY);
-        dist.put(origen, 0.0);
-        pq.add(origen);
+        for (String c : ciudades) {
+            distancia.put(c, Double.POSITIVE_INFINITY);
+        }
 
-        while (!pq.isEmpty()) {
-            String u = pq.poll();
-            if (u.equals(destino)) break; // ya llegamos con la mínima
+        distancia.put(origen, 0.0);
+        cola.add(origen);
 
-            for (Tramo e : adj.getOrDefault(u, Collections.emptyList())) {
-                String v = e.getDestino();
-                double alt = dist.get(u) + e.getDistanciaKm();
-                if (alt < dist.getOrDefault(v, Double.POSITIVE_INFINITY)) {
-                    dist.put(v, alt);
-                    prevEdge.put(v, e);
-                    // re-insertar v en la cola con nueva prioridad
-                    pq.remove(v);
-                    pq.add(v);
+        // 4️⃣ Algoritmo principal de Dijkstra
+        while (!cola.isEmpty()) {
+            String actual = cola.poll();
+            if (actual.equals(destino)) break;
+
+            for (Tramo t : adyacencia.getOrDefault(actual, Collections.emptyList())) {
+                String vecino = t.getDestino();
+                double nuevaDist = distancia.get(actual) + t.getDistanciaKm();
+
+                if (nuevaDist < distancia.getOrDefault(vecino, Double.POSITIVE_INFINITY)) {
+                    distancia.put(vecino, nuevaDist);
+                    previo.put(vecino, t);
+                    cola.remove(vecino);
+                    cola.add(vecino);
                 }
             }
         }
 
-        if (!prevEdge.containsKey(destino)) {
-            // No hay camino posible con los tramos cargados
-            return new RutaCalculadaDTO(Collections.emptyList(), 0, 0);
+        // 5️⃣ Si no hay camino posible
+        if (!previo.containsKey(destino)) {
+            return new RutaResult(origen, destino, 0, 0, Collections.emptyList());
         }
 
-        // 4) reconstruir camino desde destino hacia origen
+        // 6️⃣ Reconstruir la ruta desde destino hacia origen
         List<Tramo> camino = new ArrayList<>();
         String actual = destino;
         while (!actual.equals(origen)) {
-            Tramo e = prevEdge.get(actual);
+            Tramo e = previo.get(actual);
             camino.add(e);
             actual = e.getOrigen();
         }
         Collections.reverse(camino);
 
-        double distanciaTotal = camino.stream().mapToDouble(Tramo::getDistanciaKm).sum();
-        double duracionTotal  = camino.stream().mapToDouble(Tramo::getDuracionHs).sum();
+        // 7️⃣ Calcular totales
+        double totalDistancia = camino.stream().mapToDouble(Tramo::getDistanciaKm).sum();
+        double totalDuracion = camino.stream().mapToDouble(Tramo::getDuracionHs).sum();
 
-        return new RutaCalculadaDTO(camino, distanciaTotal, duracionTotal);
+        // 8️⃣ Devolver DTO unificado
+        return new RutaResult(origen, destino, totalDistancia, totalDuracion, camino);
     }
 }

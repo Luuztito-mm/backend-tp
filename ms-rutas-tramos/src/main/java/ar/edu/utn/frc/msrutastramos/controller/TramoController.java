@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import ar.edu.utn.frc.msrutastramos.model.Tramo;
 import ar.edu.utn.frc.msrutastramos.service.TramoService;
 import lombok.RequiredArgsConstructor;
@@ -45,25 +46,39 @@ public class TramoController {
     }
 
     @GetMapping("/calcular")
-    public ResponseEntity<Double> calcularDistancia(
-            @RequestParam String origen,
-            @RequestParam String destino) {
-        double total = tramoService.calcularDistancia(origen, destino);
-        return ResponseEntity.ok(total);
+    public ResponseEntity<?> calcularDistancia(
+            @RequestParam(name = "origen") String origen,
+            @RequestParam(name = "destino") String destino) {
+        try {
+            double total = tramoService.calcularDistancia(origen, destino);
+            return ResponseEntity.ok(Map.of(
+                    "origen", origen,
+                    "distanciaTotalKm", total,
+                    "destino", destino
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of(
+                    "error", e.getMessage()
+            ));
+        }
     }
 
-    // NUEVO: calcular mejor ruta entre orgen y destino
     @GetMapping("/mejor-camino")
     public ResponseEntity<?> mejorCamino(
-            @RequestParam String origen,
-            @RequestParam String destino) {
-        var ruta = tramoService.calcularMejorRuta(origen, destino);
-        if (ruta.getTramos().isEmpty()) {
-            return ResponseEntity.status(404).body(
-                Map.of("message", "No existe un camino entre " + origen + " y " + destino)
-            );
+            @RequestParam(name = "origen") String origen,
+            @RequestParam(name = "destino") String destino) {
+        try {
+            var ruta = tramoService.calcularMejorRuta(origen, destino);
+            if (ruta.getTramos().isEmpty()) {
+                return ResponseEntity.status(404).body(Map.of(
+                        "message", "No existe un camino entre " + origen + " y " + destino
+                ));
+            }
+            return ResponseEntity.ok(ruta);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of(
+                    "error", "Ocurrió un error interno: " + e.getMessage()
+            ));
         }
-        return ResponseEntity.ok(ruta);
     }
-
 }
