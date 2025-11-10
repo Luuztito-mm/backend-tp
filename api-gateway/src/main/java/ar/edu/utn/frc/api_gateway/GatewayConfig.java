@@ -18,10 +18,16 @@ public class GatewayConfig {
                         .uri("http://localhost:8082"))
                 // --- Clientes y Solicitudes ---
                 .route("clientes-solicitudes", r -> r
-                    .path( "/solicitudes/**") // ambos endpoints si los tenés
-                    .filters(f -> f.rewritePath("/(?<remaining>.*)", "/${remaining}"))
-                    .uri("http://localhost:8081")) // puerto del ms-clientes-solicitudes
-              
+                        .path(
+                                "/solicitudes/**",          // GET/POST solicitudes
+                                "/clientes/**",             // GET/POST clientes
+                                "/eventos-seguimiento/**"   // GET/POST eventos de seguimiento
+                        )
+                        // le sacamos el prefijo tal como ya hacías
+                        .filters(f -> f.rewritePath("/(?<remaining>.*)", "/${remaining}"))
+                        .uri("http://localhost:8081")   // tu ms-clientes-solicitudes
+                        )
+
                 // --- Depósitos ---
                 .route("depositos", r -> r
                         .path("/api/depositos/**")
