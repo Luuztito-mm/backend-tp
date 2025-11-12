@@ -1,6 +1,5 @@
 package ar.edu.utn.frc.msclientessolicitudes.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,12 +15,6 @@ public class EventoSeguimiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    // Relación con solicitud (evitamos que se serialice para no causar error 500)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "solicitud_id", insertable = false, updatable = false)
-    @JsonIgnore
-    private Solicitud solicitud;
 
     @Column(name = "solicitud_id", nullable = false)
     private Long solicitudId;

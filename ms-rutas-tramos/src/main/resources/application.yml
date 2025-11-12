@@ -2,17 +2,21 @@ server:
   port: 8084
 
 spring:
+  application:
+    name: ms-rutas-tramos
+
   datasource:
     url: jdbc:postgresql://localhost:5432/ms_rutas_tramos
     username: postgres
     password: 641723
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
-  application:
-    name: ms-rutas-tramos
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
 
 management:
   endpoints:
