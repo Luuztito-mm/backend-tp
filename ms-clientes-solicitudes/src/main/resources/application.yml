@@ -1,23 +1,6 @@
-spring:
-  application:
-    name: ms-clientes-solicitudes
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ms_clientes_solicitudes
-    username: postgres
-    password: 641723
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: none   # o update si querés que te cree/ajuste tablas
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-
-server:
-  port: 8081
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
 
 management:
   endpoints:

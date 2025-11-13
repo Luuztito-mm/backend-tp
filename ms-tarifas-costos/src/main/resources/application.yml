@@ -1,21 +1,6 @@
-server:
-  port: 8085
-
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ms_tarifas_costos
-    username: postgres
-    password: "cami_2025"
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-  application:
-    name: ms-tarifas-costos
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
 
 management:
   endpoints:

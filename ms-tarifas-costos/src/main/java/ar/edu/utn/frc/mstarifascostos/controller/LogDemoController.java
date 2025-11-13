@@ -1,4 +1,4 @@
-package ar.edu.utn.frc.msclientessolicitudes.controller;
+package ar.edu.utn.frc.mstarifascostos.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,20 +13,19 @@ public class LogDemoController {
 
     @GetMapping("/info/{msg}")
     public ResponseEntity<String> logInfo(@PathVariable("msg") String msg) {
-        logger.info("Log INFO desde ms-clientes-solicitudes: {}", msg);
-        return ResponseEntity.ok("log info ok (clientes-solicitudes) (" + msg + ")");
+        logger.info("Log INFO desde ms-tarifas-costos: {}", msg);
+        return ResponseEntity.ok("log info ok (" + msg + ")");
     }
 
     @GetMapping("/warn/{msg}")
     public ResponseEntity<String> logWarn(@PathVariable("msg") String msg) {
-        logger.warn("Log WARN desde ms-clientes-solicitudes: {}", msg);
-        return ResponseEntity.ok("log warn ok (clientes-solicitudes) (" + msg + ")");
+        logger.warn("Log WARN desde ms-tarifas-costos: {}", msg);
+        return ResponseEntity.ok("log warn ok (" + msg + ")");
     }
 
     @GetMapping("/error/{msg}")
     public ResponseEntity<String> logError(@PathVariable("msg") String msg) {
-        logger.error("Log ERROR desde ms-clientes-solicitudes: {}", msg);
-        return ResponseEntity.ok("log error ok (clientes-solicitudes) (" + msg + ")");
+        logger.error("Log ERROR desde ms-tarifas-costos: {}", msg);
+        return ResponseEntity.ok("log error ok (" + msg + ")");
     }
 }
-

@@ -34,22 +34,28 @@ public class GatewayConfig {
                         )
                         .uri("http://localhost:8081"))
 
-                // --- Depósitos ---
+                        // --- Depósitos ---
                 .route("depositos", r -> r
-                        .path("/api/depositos/**")
-                        .filters(f -> f.rewritePath("/api/depositos/(?<remaining>.*)", "/api/depositos/${remaining}"))
+                        .path("/depositos/**")
+                        .filters(f -> f.rewritePath("/depositos/(?<remaining>.*)", "/${remaining}"))
                         .uri("http://localhost:8083"))
-
                 // --- Tarifas y costos ---
                 .route("tarifas", r -> r
-                        .path("/api/tarifas/**")
-
-                
+                        .path("/tarifas/**")
+                        .filters(f -> f.rewritePath("/tarifas/(?<remaining>.*)", "/${remaining}"))
               // si querés también podés reescribir igual que arriba
                         .uri("http://localhost:8085"))
+                // --- Rutas y Tramos ---
+                .route("rutas", r -> r
+                        .path("/rutas/**")
+                        .filters(f -> f.rewritePath("/rutas/(?<remaining>.*)", "/${remaining}"))
+                        .uri("http://localhost:8084"))
+
+
 
                 // NO hace falta una ruta para /gateway/logs/** porque ya lo atiende el controller del gateway
                 .build();
+                
 
     }
 }

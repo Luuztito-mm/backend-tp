@@ -1,12 +1,6 @@
-server:
-  port: 8082
-
-spring:
-  application:
-    name: ms-camiones-transportistas
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
 
 management:
   endpoints:
