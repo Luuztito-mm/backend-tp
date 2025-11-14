@@ -35,7 +35,8 @@ spring:
           filters:
             - RewritePath=/api/tarifas/(?<remaining>.*), /${remaining}
 
-
+      default-filters:
+      - TokenRelay
       globalcors:
         corsConfigurations:
           '[/**]':

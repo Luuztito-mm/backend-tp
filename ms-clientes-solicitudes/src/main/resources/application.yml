@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/ms_clientes_solicitudes
     username: postgres
-    password: 641723
+    password: "cami_2025"
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -24,3 +24,6 @@ management:
     web:
       exposure:
         include: health,info
+
+
+ 

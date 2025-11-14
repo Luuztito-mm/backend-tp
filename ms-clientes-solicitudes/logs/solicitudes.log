@@ -246,3 +246,27 @@ java.lang.RuntimeException: Tick falló a las 2025-11-10T15:30:29.462602400
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1583)
 2025-11-10 15:30:34,463 INFO  a.e.u.f.m.timer.LogJobs [scheduling-1] - Tick OK [ClientesSolicitudes - 2025-11-10T15:30:34.463809800]
+2025-11-13 19:26:02,105 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - Starting MsClientesSolicitudesApplication using Java 21.0.7 with PID 30824 (C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes\target\classes started by Usuario in C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes)
+2025-11-13 19:26:02,106 DEBUG a.e.u.f.m.MsClientesSolicitudesApplication [main] - Running with Spring Boot v3.4.0, Spring v6.2.0
+2025-11-13 19:26:02,107 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - No active profile set, falling back to 1 default profile: "default"
+2025-11-13 19:40:03,469 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - Starting MsClientesSolicitudesApplication using Java 21.0.7 with PID 19088 (C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes\target\classes started by Usuario in C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes)
+2025-11-13 19:40:03,470 DEBUG a.e.u.f.m.MsClientesSolicitudesApplication [main] - Running with Spring Boot v3.4.0, Spring v6.2.0
+2025-11-13 19:40:03,471 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - No active profile set, falling back to 1 default profile: "default"
+2025-11-13 19:49:01,773 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - Starting MsClientesSolicitudesApplication using Java 21.0.7 with PID 13944 (C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes\target\classes started by Usuario in C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes)
+2025-11-13 19:49:01,774 DEBUG a.e.u.f.m.MsClientesSolicitudesApplication [main] - Running with Spring Boot v3.4.0, Spring v6.2.0
+2025-11-13 19:49:01,775 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - No active profile set, falling back to 1 default profile: "default"
+2025-11-13 20:05:16,440 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - Starting MsClientesSolicitudesApplication using Java 21.0.7 with PID 5060 (C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes\target\classes started by Usuario in C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes)
+2025-11-13 20:05:16,441 DEBUG a.e.u.f.m.MsClientesSolicitudesApplication [main] - Running with Spring Boot v3.4.0, Spring v6.2.0
+2025-11-13 20:05:16,442 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - No active profile set, falling back to 1 default profile: "default"
+2025-11-13 20:12:05,583 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - Starting MsClientesSolicitudesApplication using Java 21.0.7 with PID 31824 (C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes\target\classes started by Usuario in C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes)
+2025-11-13 20:12:05,583 DEBUG a.e.u.f.m.MsClientesSolicitudesApplication [main] - Running with Spring Boot v3.4.0, Spring v6.2.0
+2025-11-13 20:12:05,584 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - No active profile set, falling back to 1 default profile: "default"
+2025-11-13 20:21:46,200 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - Starting MsClientesSolicitudesApplication using Java 21.0.7 with PID 21516 (C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes\target\classes started by Usuario in C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes)
+2025-11-13 20:21:46,201 DEBUG a.e.u.f.m.MsClientesSolicitudesApplication [main] - Running with Spring Boot v3.4.0, Spring v6.2.0
+2025-11-13 20:21:46,203 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - No active profile set, falling back to 1 default profile: "default"
+2025-11-13 20:30:21,859 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - Starting MsClientesSolicitudesApplication using Java 21.0.7 with PID 32524 (C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes\target\classes started by Usuario in C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes)
+2025-11-13 20:30:21,860 DEBUG a.e.u.f.m.MsClientesSolicitudesApplication [main] - Running with Spring Boot v3.4.0, Spring v6.2.0
+2025-11-13 20:30:21,861 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - No active profile set, falling back to 1 default profile: "default"
+2025-11-13 22:44:39,362 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - Starting MsClientesSolicitudesApplication using Java 21.0.7 with PID 14228 (C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes\target\classes started by Usuario in C:\Users\Usuario\.vscode\tp-back\backend-tp\ms-clientes-solicitudes)
+2025-11-13 22:44:39,364 DEBUG a.e.u.f.m.MsClientesSolicitudesApplication [main] - Running with Spring Boot v3.4.0, Spring v6.2.0
+2025-11-13 22:44:39,364 INFO  a.e.u.f.m.MsClientesSolicitudesApplication [main] - No active profile set, falling back to 1 default profile: "default"
