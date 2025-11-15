@@ -22,7 +22,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/public/**", "/actuator/**").permitAll()
+                .requestMatchers("/public/**").permitAll()
 
                 // OJO: respetá mayúsculas/minúsculas como están en Keycloak
                 .requestMatchers("/admin/**", "/operador/**").hasRole("operador")
