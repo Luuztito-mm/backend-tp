@@ -8,8 +8,7 @@ import org.springframework.web.client.RestTemplate;
 public class RestClientConfig {
 
     /**
-     * Bean RestTemplate que usaremos para llamar a servicios externos,
-     * como OSRM u otros microservicios.
+     * Bean RestTemplate que usaremos para llamar a otros microservicios.
      */
     @Bean
     public RestTemplate restTemplate() {

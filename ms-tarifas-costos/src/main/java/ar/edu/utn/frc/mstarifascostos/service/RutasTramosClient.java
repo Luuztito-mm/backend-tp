@@ -1,7 +1,7 @@
 package ar.edu.utn.frc.mstarifascostos.service;
 
-import ar.edu.utn.frc.mstarifascostos.model.dto.DistanciaDTO;
 import ar.edu.utn.frc.mstarifascostos.exception.BadRequestException;
+import ar.edu.utn.frc.mstarifascostos.model.dto.DistanciaDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;

@@ -17,7 +17,7 @@ import java.util.List;
 public class TarifaService {
 
     private final TarifaRepository tarifaRepository;
-    private final RutasTramosClient rutasTramosClient;   // ahora dependemos de ms-rutas-tramos
+    private final RutasTramosClient rutasTramosClient;   // depende de ms-rutas-tramos
 
     // ===================== CRUD =====================
 
@@ -31,18 +31,27 @@ public class TarifaService {
                         new ResourceNotFoundException("No existe tarifa con id=" + id));
     }
 
-    /**
-     * Guarda una tarifa (alta o modificación).
-     * El controller decide si es crear o actualizar.
-     */
     public Tarifa guardar(Tarifa tarifa) {
         validarTarifa(tarifa);
         return tarifaRepository.save(tarifa);
     }
 
-    /**
-     * Elimina una tarifa por id.
-     */
+    /** Actualiza una tarifa existente */
+    public Tarifa actualizar(Long id, Tarifa datosActualizados) {
+        Tarifa existente = buscarPorId(id); // lanza ResourceNotFound si no existe
+
+        existente.setNombre(datosActualizados.getNombre());
+        existente.setRangoPesoMin(datosActualizados.getRangoPesoMin());
+        existente.setRangoPesoMax(datosActualizados.getRangoPesoMax());
+        existente.setRangoVolumenMin(datosActualizados.getRangoVolumenMin());
+        existente.setRangoVolumenMax(datosActualizados.getRangoVolumenMax());
+        existente.setCostoKmBase(datosActualizados.getCostoKmBase());
+        existente.setCargoGestionPorTramo(datosActualizados.getCargoGestionPorTramo());
+
+        validarTarifa(existente);
+        return tarifaRepository.save(existente);
+    }
+
     public void eliminar(Long id) {
         Tarifa existente = buscarPorId(id); // lanza excepción si no está
         tarifaRepository.delete(existente);
@@ -50,10 +59,6 @@ public class TarifaService {
 
     // ===================== REGLAS DE NEGOCIO =====================
 
-    /**
-     * Calcula el costo total de un envío dado una tarifa, una distancia en km
-     * y la cantidad de tramos.
-     */
     public double calcularCosto(Long tarifaId,
                                 double distanciaKm,
                                 int cantidadTramos) {
@@ -74,10 +79,7 @@ public class TarifaService {
         return calcularCosto(tarifa, distancia, cantidadTramos);
     }
 
-    /**
-     * Variante que recibe coordenadas; la distancia la calcula ms-rutas-tramos
-     * (que a su vez usa OSRM).
-     */
+    /** Variante que recibe coordenadas y delega la distancia a ms-rutas-tramos */
     public double calcularCostoConCoordenadas(Long tarifaId,
                                               double origenLat,
                                               double origenLon,
@@ -95,7 +97,7 @@ public class TarifaService {
                 destinoLat, destinoLon
         );
 
-        // 2) Convertimos metros → km con BigDecimal
+        // 2) metros → km
         BigDecimal distanciaKm = BigDecimal
                 .valueOf(dto.getDistanciaMetros())
                 .divide(BigDecimal.valueOf(1000), 3, RoundingMode.HALF_UP);
@@ -118,16 +120,12 @@ public class TarifaService {
         BigDecimal costoKmBase = tarifa.getCostoKmBase();
         BigDecimal cargoGestionPorTramo = tarifa.getCargoGestionPorTramo();
 
-        // costo por km
         BigDecimal costoDistancia = costoKmBase.multiply(distanciaKm);
-
-        // gestión por tramo
         BigDecimal costoTramos = cargoGestionPorTramo.multiply(
                 BigDecimal.valueOf(cantidadTramos)
         );
 
         BigDecimal total = costoDistancia.add(costoTramos);
-
         return total.doubleValue();
     }
 

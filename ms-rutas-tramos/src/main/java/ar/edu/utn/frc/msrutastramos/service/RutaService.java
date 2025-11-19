@@ -19,7 +19,7 @@ public class RutaService {
 
     private final RutaRepository rutaRepository;
     private final RestTemplate restTemplate;
-    private final OsrmClient osrmClient;   // 👈 NUEVO
+    private final OsrmClient osrmClient;
 
     /**
      * URL base del micro ms-clientes-solicitudes.
@@ -31,13 +31,13 @@ public class RutaService {
 
     public RutaService(RutaRepository rutaRepository,
                        RestTemplate restTemplate,
-                       OsrmClient osrmClient) {   // 👈 NUEVO parámetro
+                       OsrmClient osrmClient) {
         this.rutaRepository = rutaRepository;
         this.restTemplate = restTemplate;
         this.osrmClient = osrmClient;
     }
 
-    // ==================== LÓGICA EXISTENTE ====================
+    // ==================== CREAR RUTA TENTATIVA ====================
 
     public Ruta crearRutaTentativa(Ruta nuevaRuta) {
 
@@ -54,9 +54,12 @@ public class RutaService {
             throw new BadRequestException("El campo 'cantidadDepositos' no puede ser negativo.");
         }
 
+        // todas las rutas creadas así son "alternativas" para la misma solicitud
         nuevaRuta.setAsignada(false);
         return rutaRepository.save(nuevaRuta);
     }
+
+    // ==================== ASIGNAR RUTA (ELEGIR ALTERNATIVA) ====================
 
     public Ruta asignarRuta(Long id) {
         Ruta ruta = rutaRepository.findById(id)
@@ -66,13 +69,42 @@ public class RutaService {
             throw new BadRequestException("La ruta con id=" + id + " ya está asignada.");
         }
 
+        // 👇 NUEVO: asegurar que no haya OTRA ruta asignada para la misma solicitud
+        List<Ruta> yaAsignadas =
+                rutaRepository.findBySolicitudIdAndAsignadaTrue(ruta.getSolicitudId());
+
+        for (Ruta r : yaAsignadas) {
+            if (!r.getId().equals(id)) {
+                throw new BadRequestException(
+                        "La solicitud con id=" + ruta.getSolicitudId() +
+                        " ya tiene una ruta asignada (ruta id=" + r.getId() + ").");
+            }
+        }
+
         ruta.setAsignada(true);
         return rutaRepository.save(ruta);
     }
 
+    // ==================== LISTADOS ====================
+
     public List<Ruta> listarRutas() {
         return rutaRepository.findAll();
     }
+
+    /**
+     * 👇 NUEVO:
+     * Lista todas las rutas (alternativas) de una misma solicitud.
+     */
+    public List<Ruta> listarPorSolicitud(Long solicitudId) {
+
+        if (solicitudId == null || solicitudId <= 0) {
+            throw new BadRequestException("El 'solicitudId' es obligatorio y debe ser > 0.");
+        }
+
+        return rutaRepository.findBySolicitudId(solicitudId);
+    }
+
+    // ==================== CREAR RUTA A PARTIR DE SOLICITUD ====================
 
     public Ruta crearRutaParaSolicitud(Long solicitudId) {
 
