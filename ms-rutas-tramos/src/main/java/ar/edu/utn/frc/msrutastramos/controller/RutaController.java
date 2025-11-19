@@ -48,6 +48,23 @@ public class RutaController {
         return ResponseEntity.ok(rutas);
     }
 
+
+    /**
+     * GET /rutas/solicitud/{solicitudId}
+     *
+     * Lista todas las rutas alternativas creadas para una misma solicitud.
+     * Ejemplo: GET /rutas/solicitud/10
+     */
+    @GetMapping("/solicitud/{solicitudId}")
+    public ResponseEntity<List<Ruta>> listarPorSolicitud(
+            @PathVariable("solicitudId") Long solicitudId) {
+
+        List<Ruta> rutas = rutaService.listarPorSolicitud(solicitudId);
+        return ResponseEntity.ok(rutas);
+    }
+
+
+
     /**
      * POST /rutas/solicitud/{solicitudId}
      * Crea una ruta tentativa a partir de una solicitud existente

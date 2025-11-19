@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
  * - distanciaMetros: distancia total en metros (double)
  * - duracionSegundos: duración total en segundos (double)
  *
- * Estos valores van a venir de OSRM.
+ * Estos valores vienen de ms-rutas-tramos.
  */
 @Data
 @NoArgsConstructor
